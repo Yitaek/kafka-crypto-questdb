@@ -6,7 +6,7 @@ The project was inspired by ["Using Kafka Streams to Analyze Live Trading Activi
 
 ## Prerequisites
 
-- Docker
+- Docker (min of 4GB memory)
 - Python 3.7+
 
 ## Structure
@@ -17,6 +17,7 @@ The project was inspired by ["Using Kafka Streams to Analyze Live Trading Activi
     - config.py: specify polling frequency, cryptocurrency
     - getData.py: polls Coinbase API and publishes records to Kafka
     - kafkaHelper.py: wrapper around kafka-python lib
+    - movingAverage.py: calculates a moving average per cryptocurrency
 
 ## Quickstart
 
@@ -39,14 +40,10 @@ curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" --d
 
 ### Python Setup
 
-Using pipenv or conda, create a Python environment. I used conda had `numpy` pre-installed (install numpy if you need).
-
-Install kafka-python: 
+Install the necessary packages:
 
 ```
 pip install kafka-python
-
-# or conda install kafka-python
 ```
 
 Run the script to poll Coinbase API:

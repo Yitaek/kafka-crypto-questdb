@@ -1,5 +1,6 @@
 import json, requests, time, asyncio
 import numpy as np
+import datetime as dt
 
 from kafkaHelper import initProducer, produceRecord
 from config import config, params
@@ -32,7 +33,7 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
                     "field": "amount"
                   },
                   {
-                    "type": "double",
+                    "type": "string",
                     "optional": False,
                     "field": "timestamp"
                   }
@@ -41,24 +42,24 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
                 "name": "coinbase"
               },
               "payload": {
-                "timestamp": time.time(),
+                "timestamp": dt.datetime.utcnow(),
                 "currency": raw_data['data']['base'],
                 "amount": float(raw_data['data']['amount'])
               }
             }    
 
             # debug / print message
-            print('API request at time {0}'.format(time.time()))
+            print('API request at time {0}'.format(dt.datetime.utcnow()))
             # produce record to kafka
             produceRecord(new_data, producer, topic)
             # debug \ message in prompt
-            # print('Produce record to topic \'{0}\' at time {1}'.format(topic, time.time()))
+            # print('Produce record to topic \'{0}\' at time {1}'.format(topic, dt.datetime.utcnow()))
             
             print('Record: {}'.format(new_data))
             
         else:
             # debug / print message
-            print('Failed API request at time {0}'.format(time.time()))
+            print('Failed API request at time {0}'.format(dt.datetime.utcnow()))
         # wait
         await asyncio.sleep(time_inverval - (time.time() - t_0))
 
