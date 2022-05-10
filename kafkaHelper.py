@@ -25,11 +25,33 @@ def initConsumer(topic, timeout=1000):
     return consumer
 
 
+def on_send_success(record_metadata):
+    print(record_metadata.topic)
+    print(record_metadata.partition)
+    print(record_metadata.offset)
+
+def on_send_error(excp):
+    log.error('I am an errback', exc_info=excp)
+    # handle exception
+
+
 def produceRecord(data, producer, topic, partition=0):
     # act as a producer sending records on kafka
-    producer.send(topic=topic, partition=partition, value=data)
+    # print("hello?")
+    # future = producer.send(topic=topic, partition=partition, value=data)
+    # try:
+    #     record_metadata = future.get(timeout=10)
+    # except KafkaError:
+    #     # Decide what to do if produce request failed...
+    #     log.exception()
+    #     pass
+
+    # produce json messages
+    # produce asynchronously with callbacks
+    producer.send(topic=topic, partition=partition, value=data).add_callback(on_send_success).add_errback(on_send_error)
+
     # debug \ message in prompt
-    # print('Produce record to topic \'{0}\' at time {1}'.format(topic, dt.datetime.utcnow()))
+    print('Produce record to topic \'{0}\' at time {1}'.format(topic, dt.datetime.utcnow()))
 
 def consumeRecord(consumer):
     rec_list = []

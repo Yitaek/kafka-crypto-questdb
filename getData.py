@@ -16,7 +16,7 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
         if (res.status_code==200):
             # read json response
             raw_data = json.loads(res.content)
-       
+
             # add schema
             new_data = {
               "schema": {
@@ -46,7 +46,7 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
                 "currency": raw_data['data']['base'],
                 "amount": float(raw_data['data']['amount'])
               }
-            }    
+            }
 
             # debug / print message
             print('API request at time {0}'.format(dt.datetime.utcnow()))
@@ -54,9 +54,9 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
             produceRecord(new_data, producer, topic)
             # debug \ message in prompt
             # print('Produce record to topic \'{0}\' at time {1}'.format(topic, dt.datetime.utcnow()))
-            
+
             print('Record: {}'.format(new_data))
-            
+
         else:
             # debug / print message
             print('Failed API request at time {0}'.format(dt.datetime.utcnow()))
