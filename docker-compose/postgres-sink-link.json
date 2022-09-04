@@ -1,9 +1,9 @@
 {
-  "name": "postgres-sink-btc",
+  "name": "postgres-sink-link",
   "config": {
     "connector.class":"io.confluent.connect.jdbc.JdbcSinkConnector",
     "tasks.max":"1",
-    "topics": "topic_BTC",
+    "topics": "topic_LINK",
     "table.name.format": "coinbase",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
