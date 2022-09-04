@@ -1,5 +1,9 @@
 ---
 version: '3.7'
+volumes:
+  redpanda: {}
+  questdb: {}
+  connect: {}
 services:
   redpanda:
     command:
@@ -17,9 +21,11 @@ services:
     - --advertise-kafka-addr
     - PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
     # NOTE: Please use the latest version here!
-    image: docker.vectorized.io/vectorized/redpanda:v21.9.5
+    image: docker.vectorized.io/vectorized/redpanda
     container_name: redpanda-1
     hostname: redpanda
+    volumes:
+      - redpanda:/var/lib/redpanda/data
     ports:
     - 9092:9092
     - 29092:29092
@@ -46,11 +52,15 @@ services:
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+    volumes:
+    - connect:/var/lib/kafka/data
 
   questdb:
-    image: questdb/questdb:latest
+    image: questdb/questdb
     hostname: questdb
     container_name: questdb
+    volumes:
+      - questdb:/var/lib/questdb
     ports:
-      - "9000:9000"
-      - "8812:8812"
+      - "9000:9000" # Web UI
+      - "8812:8812" # Postgres Wire Protocol
