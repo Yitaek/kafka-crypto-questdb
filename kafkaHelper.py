@@ -48,7 +48,9 @@ def produceRecord(data, producer, topic, partition=0):
 
     # produce json messages
     # produce asynchronously with callbacks
-    producer.send(topic=topic, partition=partition, value=data).add_callback(on_send_success).add_errback(on_send_error)
+    producer.send(topic=topic, partition=partition, value=data).add_callback(
+        on_send_success
+    ).add_errback(on_send_error)
 
     # debug \ message in prompt
     print('Produce record to topic \'{0}\' at time {1}'.format(topic, dt.datetime.utcnow()))

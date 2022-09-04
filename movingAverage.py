@@ -1,5 +1,5 @@
-import pandas as pd 
-import numpy as np 
+import pandas as pd
+import numpy as np
 import datetime as dt
 
 from kafkaHelper import produceRecord, consumeRecord, initConsumer, initProducer
@@ -17,15 +17,38 @@ data_1 = pd.DataFrame(columns=['time', 'value'])
 data_2 = pd.DataFrame(columns=['time', 'value'])
 data_3 = pd.DataFrame(columns=['time', 'value'])
 
+schema = {
+    "schema": {
+        "type": "struct",
+        "fields": [
+            {"type": "string", "optional": False, "field": "currency"},
+            {"type": "string", "optional": False, "field": "timestamp"},
+            {"type": "float", "optional": False, "field": "amount"}
+        ],
+        "optional": False,
+        "name": "moving_averages",
+    }
+}
+
 while True:
     # consume data from Kafka
     # topic 1 --> 4
     records_1 = consumeRecord(consumer_1)
     print('Consume record from topic \'{0}\' at time {1}'.format(config['topic_1'], dt.datetime.utcnow()))
     for r in records_1:
-        dt_obj = dt.datetime.strptime(r['payload']['timestamp'], '%Y-%m-%d %H:%M:%S.%f')
-        data_1.loc[len(data_1)] = [int(dt_obj.timestamp() * 1000), float(r['payload']['amount'])]
-        ma_1 = {'timestamp': r['payload']['timestamp'], 'amount': float(data_1['value'].tail(n=params['ma']).mean())}
+        dt_obj = dt.datetime.strptime(r["payload"]["timestamp"], "%Y-%m-%d %H:%M:%S.%f")
+        data_1.loc[len(data_1)] = [
+            int(dt_obj.timestamp() * 1000),
+            float(r["payload"]["amount"]),
+        ]
+        ma_1 = {
+            "payload": {
+                "currency": "BTC",
+                "timestamp": dt_obj,
+                "amount": float(data_1["value"].tail(n=params["ma"]).mean()),
+            }
+        }
+        ma_1 = ma_1 | schema
         # produce data
         produceRecord(ma_1, producer, config['topic_4'])
         print('Produce record to topic \'{0}\' at time {1}'.format(config['topic_4'], dt.datetime.utcnow()))
@@ -34,9 +57,19 @@ while True:
     records_2 = consumeRecord(consumer_2)
     print('Consume records from topic \'{0}\' at time {1}'.format(config['topic_2'], dt.datetime.utcnow()))
     for r in records_2:
-        dt_obj = dt.datetime.strptime(r['payload']['timestamp'], '%Y-%m-%d %H:%M:%S.%f')
-        data_2.loc[len(data_2)] = [int(dt_obj.timestamp() * 1000), float(r['payload']['amount'])]
-        ma_2 = {'timestamp': r['payload']['timestamp'], 'amount': float(data_2['value'].tail(n=params['ma']).mean())}
+        dt_obj = dt.datetime.strptime(r["payload"]["timestamp"], "%Y-%m-%d %H:%M:%S.%f")
+        data_2.loc[len(data_2)] = [
+            int(dt_obj.timestamp() * 1000),
+            float(r["payload"]["amount"]),
+        ]
+        ma_2 = {
+            "payload": {
+                "currency": "ETH",
+                "timestamp": dt_obj,
+                "amount": float(data_2["value"].tail(n=params["ma"]).mean()),
+            }
+        }
+        ma_2 = ma_2 | schema
         # produce data
         produceRecord(ma_2, producer, config['topic_5'])
         print('Produce record to topic \'{0}\' at time {1}'.format(config['topic_5'], dt.datetime.utcnow()))
@@ -45,9 +78,19 @@ while True:
     records_3 = consumeRecord(consumer_3)
     print('Consume records from topic \'{0}\' at time {1}'.format(config['topic_3'], dt.datetime.utcnow()))
     for r in records_3:
-        dt_obj = dt.datetime.strptime(r['payload']['timestamp'], '%Y-%m-%d %H:%M:%S.%f')
-        data_3.loc[len(data_3)] = [int(dt_obj.timestamp() * 1000), float(r['payload']['amount'])]
-        ma_3 = {'timestamp': r['payload']['timestamp'], 'amount': float(data_3['value'].tail(n=params['ma']).mean())}
+        dt_obj = dt.datetime.strptime(r["payload"]["timestamp"], "%Y-%m-%d %H:%M:%S.%f")
+        data_3.loc[len(data_3)] = [
+            int(dt_obj.timestamp() * 1000),
+            float(r["payload"]["amount"]),
+        ]
+        ma_3 = {
+            "payload": {
+                "currency": "LINK",
+                "timestamp": dt_obj,
+                "amount": float(data_3["value"].tail(n=params["ma"]).mean()),
+            }
+        }
+        ma_3 = ma_3 | schema
         # produce data
         produceRecord(ma_3, producer, config['topic_6'])
         print('Produce record to topic \'{0}\' at time {1}'.format(config['topic_6'], dt.datetime.utcnow()))
