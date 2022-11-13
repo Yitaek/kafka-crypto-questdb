@@ -42,7 +42,7 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
                 "name": "coinbase"
               },
               "payload": {
-                "timestamp": dt.datetime.utcnow(),
+                "timestamp": str(dt.datetime.utcnow()),
                 "currency": raw_data['data']['base'],
                 "amount": float(raw_data['data']['amount'])
               }

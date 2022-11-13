@@ -1,3 +1,7 @@
-FROM confluentinc/cp-kafka-connect-base:6.1.0
+FROM alpine:latest AS builder
 
-RUN confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:10.0.1
+RUN wget https://github.com/questdb/kafka-questdb-connector/releases/download/v0.3/kafka-questdb-connector-0.3-bin.zip && \
+    unzip kafka-questdb-connector-*-bin.zip
+    
+FROM confluentinc/cp-kafka-connect:7.3.0
+COPY --from=builder /kafka-questdb-connector/*.jar /usr/share/java/kafka/
