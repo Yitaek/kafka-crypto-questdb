@@ -1,6 +1,6 @@
 import json, requests, time, asyncio
 import numpy as np
-import datetime as dt
+import time
 
 from kafkaHelper import initProducer, produceRecord
 from config import config, params
@@ -19,37 +19,15 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
        
             # add schema
             new_data = {
-              "schema": {
-                "type": "struct",
-                "fields": [
-                  {
-                    "type": "string",
-                    "optional": False,
-                    "field": "currency"
-                  },
-                  {
-                    "type": "float",
-                    "optional": False,
-                    "field": "amount"
-                  },
-                  {
-                    "type": "string",
-                    "optional": False,
-                    "field": "timestamp"
-                  }
-                ],
-                "optional": False,
-                "name": "coinbase"
-              },
-              "payload": {
-                "timestamp": str(dt.datetime.utcnow()),
-                "currency": raw_data['data']['base'],
-                "amount": float(raw_data['data']['amount'])
-              }
+            
+              "timestamp": int(time.time() * 1000),
+              "currency": raw_data['data']['base'],
+              "amount": float(raw_data['data']['amount'])
+              
             }    
 
             # debug / print message
-            print('API request at time {0}'.format(dt.datetime.utcnow()))
+            # print('API request at time {0}'.format(dt.datetime.utcnow()))
             # produce record to kafka
             produceRecord(new_data, producer, topic)
             # debug \ message in prompt

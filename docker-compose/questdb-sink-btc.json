@@ -1,18 +1,13 @@
 {
-  "name": "questdb-sink-btc",
+  "name": "questdb-sink-btc2",
   "config": {
     "connector.class":"io.questdb.kafka.QuestDBSinkConnector",
     "tasks.max":"1",
-    "topics": "topic_BTC",
+    "topics": "topic_ETH",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
     "key.converter.schemas.enable": "false",
-    "value.converter.schemas.enable": "true",
-    "host": "questdb",
-    "transforms": "convert_timestamp",
-    "transforms.convert_timestamp.type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
-    "transforms.convert_timestamp.target.type": "Timestamp",
-    "transforms.convert_timestamp.field": "timestamp",
-    "transforms.convert_timestamp.format": "yyyy-MM-dd HH:mm:ss.SSSSSS"
+    "value.converter.schemas.enable": "false",
+    "host": "questdb"
   }
 }
