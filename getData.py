@@ -1,9 +1,8 @@
 import json, requests, time, asyncio
-import numpy as np
 import datetime as dt
 
-from kafkaHelper import initProducer, produceRecord
-from config import config, params
+from kafkaHelper import produceRecord
+from config import params
 
 # real time data collector
 async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
@@ -62,16 +61,3 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
             print('Failed API request at time {0}'.format(dt.datetime.utcnow()))
         # wait
         await asyncio.sleep(time_inverval - (time.time() - t_0))
-
-# initialize kafka producer
-producer = initProducer()
-
-# define async routine
-async def main():
-    await asyncio.gather(
-    async_getCryptoRealTimeData(producer, config['topic_1'], params['currency_1'], params['api_call_period']),
-    async_getCryptoRealTimeData(producer, config['topic_2'], params['currency_2'], params['api_call_period']),
-    async_getCryptoRealTimeData(producer, config['topic_3'], params['currency_3'], params['api_call_period'])
-)
-# run async routine
-asyncio.run(main())
