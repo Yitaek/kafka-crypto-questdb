@@ -19,42 +19,15 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
        
             # add schema
             new_data = {
-              "schema": {
-                "type": "struct",
-                "fields": [
-                  {
-                    "type": "string",
-                    "optional": False,
-                    "field": "currency"
-                  },
-                  {
-                    "type": "float",
-                    "optional": False,
-                    "field": "amount"
-                  },
-                  {
-                    "type": "string",
-                    "optional": False,
-                    "field": "timestamp"
-                  }
-                ],
-                "optional": False,
-                "name": "coinbase"
-              },
-              "payload": {
-                "timestamp": dt.datetime.utcnow(),
-                "currency": raw_data['data']['base'],
-                "amount": float(raw_data['data']['amount'])
-              }
+            
+              "timestamp": int(time.time() * 1000),
+              "currency": raw_data['data']['base'],
+              "amount": float(raw_data['data']['amount'])
+              
             }    
 
-            # debug / print message
-            print('API request at time {0}'.format(dt.datetime.utcnow()))
             # produce record to kafka
             produceRecord(new_data, producer, topic)
-            # debug \ message in prompt
-            # print('Produce record to topic \'{0}\' at time {1}'.format(topic, dt.datetime.utcnow()))
-            
             print('Record: {}'.format(new_data))
             
         else:

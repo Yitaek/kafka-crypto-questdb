@@ -2,7 +2,7 @@
 version: '2'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:6.1.0
+    image: confluentinc/cp-zookeeper:7.3.0
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -12,7 +12,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
-    image: confluentinc/cp-server:6.1.0
+    image: confluentinc/cp-server:7.3.0
     hostname: broker
     container_name: broker
     depends_on:
@@ -41,7 +41,7 @@ services:
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
   kafka-connect:
-    image: yitaekhwang/cp-kafka-connect-postgres:6.1.0
+    image: yitaekhwang/cp-kafka-connect-questdb:7.3.0
     hostname: connect
     container_name: connect
     depends_on:
@@ -61,13 +61,13 @@ services:
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
       CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
 
   questdb:
-    image: questdb/questdb:latest
+    image: questdb/questdb:6.5.4
     hostname: questdb
     container_name: questdb
     ports:
       - "9000:9000"
-      - "8812:8812"
+      - "9009:9009"

@@ -35,7 +35,7 @@ Wait until all the components are healthy (look at Kafka Connect container logs)
 Post kafka-postgres-btc sink schema to Kafka Connect:
 
 ```
-curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" --data @postgres-sink.json http://localhost:8083/connectors
+curl -X POST -H "Accept:application/json" -H "Content-Type:application/json" --data @questdb-sink-btc.json http://localhost:8083/connectors
 ```
 
 ### Python Setup

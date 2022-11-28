@@ -11,7 +11,7 @@ def initProducer():
     print('Initializing Kafka producer at {}'.format(dt.datetime.utcnow()))
     producer = KafkaProducer(
       bootstrap_servers=config['kafka_broker'],
-      value_serializer=lambda v: json.dumps(v, default=str).encode('utf-8')
+      value_serializer=lambda v: json.dumps(v).encode('utf-8')
     )
     print('Initialized Kafka producer at {}'.format(dt.datetime.utcnow()))
     return producer
