@@ -1,6 +1,6 @@
 import json, requests, time, asyncio
 import numpy as np
-import time
+import datetime as dt
 
 from kafkaHelper import initProducer, produceRecord
 from config import config, params
@@ -26,13 +26,8 @@ async def async_getCryptoRealTimeData(producer, topic, crypto, time_inverval):
               
             }    
 
-            # debug / print message
-            # print('API request at time {0}'.format(dt.datetime.utcnow()))
             # produce record to kafka
             produceRecord(new_data, producer, topic)
-            # debug \ message in prompt
-            # print('Produce record to topic \'{0}\' at time {1}'.format(topic, dt.datetime.utcnow()))
-            
             print('Record: {}'.format(new_data))
             
         else:
