@@ -27,7 +27,7 @@ Start up the Kafka/QuestDB stack:
 
 ```
 cd docker-compose
-docker-compose up
+docker compose up
 ```
 
 Wait until all the components are healthy (look at Kafka Connect container logs).

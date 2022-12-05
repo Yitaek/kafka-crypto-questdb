@@ -65,7 +65,7 @@ services:
       CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
 
   questdb:
-    image: questdb/questdb:6.5.4
+    image: questdb/questdb:6.6.1
     hostname: questdb
     container_name: questdb
     ports:
