@@ -9,6 +9,7 @@
     "key.converter.schemas.enable": "false",
     "value.converter.schemas.enable": "false",
     "host": "questdb",
-    "timestamp.field.name": "timestamp"
+    "timestamp.field.name": "timestamp",
+    "symbols":"currency"
   }
 }
